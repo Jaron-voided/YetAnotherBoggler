@@ -22,4 +22,13 @@ public struct Position
         int y = index / boardWidth;
         return (x, y);
     }
+
+    public Position Move(Direction dir)
+    {
+        var position = new Position(PX, PY);
+        position.PX += dir.DX;
+        position.PY += dir.DY;
+        
+        return position;
+    }
 }

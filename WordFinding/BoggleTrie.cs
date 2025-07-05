@@ -1,6 +1,6 @@
 namespace YetAnotherBoggler.WordFinding;
 
-internal class BoggleTrie
+public class BoggleTrie
 {
     private readonly TrieNode _root = new TrieNode();           // the root will always be blank, it has 26 children A-Z
     internal TrieNode CurrentNode { get; set; }                 // need to keep up with Current so we can traverse
