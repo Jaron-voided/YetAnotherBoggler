@@ -11,7 +11,7 @@ public class BoggleBoard : IBoard
     {
         BoggleBoard board = new BoggleBoard();
         board.Size = size;
-        board.LetterGrid = board.MakeGrid(letterss);
+        board.LetterGrid = board.MakeGrid(letters);
 
         return board;
     }

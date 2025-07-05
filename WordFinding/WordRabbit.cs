@@ -1,4 +1,5 @@
 using YetAnotherBoggler.Boards;
+using YetAnotherBoggler.Interfaces;
 using YetAnotherBoggler.Utils;
 
 namespace YetAnotherBoggler.WordFinding;
@@ -38,10 +39,10 @@ public class WordRabbit
     public bool CheckMove(BoggleBoard board, Direction dir)
     {
         // Checks if the move is on the board
-        if (dir.IsValidMove(CurrentPosition, board))
+        if (!dir.IsValidMove(CurrentPosition, board))
             return false;
 
-        var positionToMoveTo = CurrentPosition.Move(dir);
+        var positionToMoveTo = CurrentPosition.TryMove(dir);
         if (History.IsVisited(positionToMoveTo, board))
             return false;
 
@@ -58,17 +59,27 @@ public class WordRabbit
         return false;
     }
 
+    public void Start(BoggleBoard board)
+    {
+        History.Visit(CurrentPosition, board);
+        string letter = board.LetterGrid[CurrentPosition.PX, CurrentPosition.PY];
+        WordSoFar += letter;
+        Trie.Traverse(letter[0]);
+    }
+
     public void Move(Direction dir, BoggleBoard board)
     {
         if (!CheckMove(board, dir))
             return;
         
-        Position positionToMoveTo = CurrentPosition.Move(dir);
+        Position positionToMoveTo = CurrentPosition.TryMove(dir);
         string letter = board.LetterGrid[positionToMoveTo.PX, positionToMoveTo.PY];
 
         if (!CheckLetter(letter))
             return;
+        WordSoFar += letter;
 
+        //CurrentPosition.Move(dir);
         CurrentPosition = positionToMoveTo;
         Trie.Traverse(letter[0]);
         History.Visit(CurrentPosition, board);

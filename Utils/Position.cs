@@ -23,7 +23,13 @@ public struct Position
         return (x, y);
     }
 
-    public Position Move(Direction dir)
+    public void Move(Direction dir)
+    {
+        PX += dir.DX;
+        PY += dir.DY;
+    }
+
+    public Position TryMove(Direction dir)
     {
         var position = new Position(PX, PY);
         position.PX += dir.DX;

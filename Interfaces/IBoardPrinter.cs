@@ -1,6 +1,8 @@
+using YetAnotherBoggler.Boards;
+
 namespace YetAnotherBoggler.Interfaces;
 
 public interface IBoardPrinter
 {
-    void DisplayBoard(IBoard board);
+    void DisplayBoard(BoggleBoard board);
 }
