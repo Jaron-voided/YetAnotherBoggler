@@ -2,5 +2,5 @@ namespace YetAnotherBoggler.Interfaces;
 
 public interface IShaker
 {
-    void Shake(IBoard board);
+    string[] Shake(List<string[]> letterSets);
 }

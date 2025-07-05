@@ -1,6 +1,8 @@
+using YetAnotherBoggler.Interfaces;
+
 namespace YetAnotherBoggler.LetterSetProviders;
 
-public class TestLetterSetProvider
+public class TestLetterSetProvider : ILetterSetProvider
 {
     private readonly List<string[]> _faces = new()
     {
