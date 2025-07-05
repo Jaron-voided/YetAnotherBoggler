@@ -5,17 +5,17 @@ namespace YetAnotherBoggler.Boards;
 public class BoggleBoard : IBoard
 {
     public int Size { get; set; } = 4;
-    private string[] _letters { get; set; }
+    public string[,] LetterGrid { get; set; }
 
     public static BoggleBoard Create(string[] letters, int size = 4)
     {
         BoggleBoard board = new BoggleBoard();
         board.Size = size;
-        board._letters = letters;
+        board.LetterGrid = board.MakeGrid(letterss);
 
         return board;
     }
-    public string[,] GetLetters()
+    public string[,] MakeGrid(string[] letters)
     {
         string[,] grid = new string[Size, Size];
 
@@ -24,7 +24,7 @@ public class BoggleBoard : IBoard
         {
             for (int y = 0; y < Size; y++)
             {
-                grid[x, y] = _letters[index];
+                grid[x, y] = letters[index];
                 index++;
             }
         }
