@@ -22,7 +22,39 @@ printer.DisplayBoard(boggleBoard);
 BoggleDictionary dictionary = BoggleDictionary.Create();
 
 BoggleTrie trie = BoggleTrie.Create(dictionary.Words);
+Position pos =  new Position(0, 0);
 
+/*WordRabbit rabbit = WordRabbit.Create(pos, trie);
+WordFinder.ExploreBoard(rabbit, boggleBoard);
+foreach (string word in WordRabbit.Words)
+{
+    Console.WriteLine(word);
+}*/
+List<WordRabbit> rabbits = new();
+
+for (int x = 0; x < boggleBoard.Size; x++)
+{
+    for (int y = 0; y < boggleBoard.Size; y++)
+    {
+        Position position = new Position(x, y);
+        BoggleTrie rabbitTrie = BoggleTrie.Create(dictionary.Words);
+        WordRabbit rabbit = WordRabbit.Create(position, rabbitTrie);
+        rabbits.Add(rabbit);
+    }
+}
+
+foreach (WordRabbit rabbit in rabbits)
+{
+    WordFinder.ExploreBoard(rabbit, boggleBoard);
+}
+
+foreach (string word in WordRabbit.Words)
+{
+    Console.WriteLine(word);
+}
+
+
+/*
 Position startingPosition = new Position(0, 0);
 WordRabbit rabbit = WordRabbit.Create(startingPosition, trie);
 
@@ -41,4 +73,5 @@ foreach (string word in rabbit.Words)
 {
     Console.WriteLine(word);
 }
+*/
 

@@ -8,7 +8,9 @@ public class WordRabbit
 {
     internal VisitHistory History { get; set; }
     internal string WordSoFar { get; set; }
-    internal List<string> Words { get; set; }
+    // Made this static so all rabbits add to the same list
+    // Might cause problems eventually??
+    internal static List<string> Words { get; set; }
     internal Position CurrentPosition { get; set; }
     internal BoggleTrie Trie { get; set; }
 
@@ -17,7 +19,7 @@ public class WordRabbit
         WordRabbit rabbit = new WordRabbit();
         rabbit.History = new VisitHistory();
         rabbit.WordSoFar = "";
-        rabbit.Words = new List<string>();
+        Words = new List<string>();
         rabbit.CurrentPosition = startingPosition;
         rabbit.Trie = trie;
         
@@ -28,7 +30,8 @@ public class WordRabbit
     {
         if (Trie.CurrentNode.IsWord)
         {
-            Words.Add(WordSoFar);
+            if (!Words.Contains(WordSoFar))
+                Words.Add(WordSoFar);
             //WordSoFar = "";
             return true;
         }
@@ -67,16 +70,17 @@ public class WordRabbit
         Trie.Traverse(letter[0]);
     }
 
-    public void Move(Direction dir, BoggleBoard board)
+    public bool Move(Direction dir, BoggleBoard board)
     {
         if (!CheckMove(board, dir))
-            return;
+            return false;
         
         Position positionToMoveTo = CurrentPosition.TryMove(dir);
         string letter = board.LetterGrid[positionToMoveTo.PX, positionToMoveTo.PY];
 
         if (!CheckLetter(letter))
-            return;
+            return false;
+        
         WordSoFar += letter;
 
         //CurrentPosition.Move(dir);
@@ -85,6 +89,7 @@ public class WordRabbit
         History.Visit(CurrentPosition, board);
 
         IsWord();
+        return true;
     }
 
     public WordRabbit Breed()
@@ -93,7 +98,7 @@ public class WordRabbit
 
         babyRabbit.History = this.History.Copy();
         babyRabbit.WordSoFar = this.WordSoFar;
-        babyRabbit.Words = this.Words;
+        //babyRabbit.Words = this.Words;
         babyRabbit.CurrentPosition = this.CurrentPosition;
         babyRabbit.Trie = this.Trie;
 
