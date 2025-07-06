@@ -28,7 +28,7 @@ public class WordRabbit
     {
         if (Trie.CurrentNode.IsWord)
         {
-            Words.Append(WordSoFar);
+            Words.Add(WordSoFar);
             //WordSoFar = "";
             return true;
         }
@@ -85,6 +85,18 @@ public class WordRabbit
         History.Visit(CurrentPosition, board);
 
         IsWord();
+    }
 
+    public WordRabbit Breed()
+    {
+        WordRabbit babyRabbit = new WordRabbit();
+
+        babyRabbit.History = this.History.Copy();
+        babyRabbit.WordSoFar = this.WordSoFar;
+        babyRabbit.Words = this.Words;
+        babyRabbit.CurrentPosition = this.CurrentPosition;
+        babyRabbit.Trie = this.Trie;
+
+        return babyRabbit;
     }
 }

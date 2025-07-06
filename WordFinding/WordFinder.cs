@@ -1,4 +1,4 @@
-/*using YetAnotherBoggler.Boards;
+using YetAnotherBoggler.Boards;
 using YetAnotherBoggler.Interfaces;
 using YetAnotherBoggler.Utils;
 
@@ -6,16 +6,22 @@ namespace YetAnotherBoggler.WordFinding;
 
 public class WordFinder
 {
-
-    public string BuildWord(VisitHistory history, Direction dir, BoggleTrie trie, Position pos, string wordSoFar, BoggleBoard board)
+    Direction[] directions = Direction.AllDirections;
+    public List<string> ExploreBoard(WordRabbit wordRabbit, BoggleBoard board)
     {
-        Position newPosition = pos.Move(dir);
-        string letterToCheck = board.LetterGrid[newPosition.PX, newPosition.PY];
-        if (CheckLetter(letterToCheck, trie) && CheckMove(board, history, trie, pos, dir))
-        {
-            wordSoFar += letterToCheck;
-            pos = newPosition;
-        }
+        wordRabbit.Start(board);
+        ExploreBoard(wordRabbit, wordRabbit.CurrentPosition, board);
+        
+        return wordRabbit.Words;
     }
 
-}*/
+    public void ExploreBoard(WordRabbit wordRabbit, Position position, BoggleBoard board)
+    {
+        foreach (Direction direction in directions)
+        {
+            WordRabbit babyRabbit = wordRabbit.Breed();
+            babyRabbit.Move(direction, board);
+            ExploreBoard(babyRabbit, babyRabbit.CurrentPosition, board);
+        }
+    }
+}

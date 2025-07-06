@@ -35,6 +35,8 @@ for (var i = 0; i < 3; i++)
     rabbit.Move(directions[4], boggleBoard);
 }
 
+Console.WriteLine("Word rabbit found the following words...");
+
 foreach (string word in rabbit.Words)
 {
     Console.WriteLine(word);

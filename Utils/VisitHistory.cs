@@ -22,5 +22,13 @@ public class VisitHistory
         
         // Check whether the bit at 'index' is set to 1.
         // If (_history & (1 << index)) != 0, it means this position has been visited.
-        return (_history & (1 << index)) != 0;    }
+        return (_history & (1 << index)) != 0;    
+    }
+
+    public VisitHistory Copy()
+    {
+        VisitHistory copy = new VisitHistory();
+        copy._history = this._history;
+        return copy;
+    }
 }
