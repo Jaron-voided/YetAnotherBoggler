@@ -1,5 +1,6 @@
 namespace YetAnotherBoggler.LetterSetProviders;
 
+// Returns a simple, testable baord setup
 public class TestLetterSetProvider : ILetterSetProvider
 {
     private readonly List<string[]> _faces = new()

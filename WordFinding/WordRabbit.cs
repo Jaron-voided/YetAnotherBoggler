@@ -7,9 +7,7 @@ public sealed class WordRabbit
 {
     internal VisitHistory History { get; set; }
     internal string WordSoFar { get; set; }
-    // Made this static so all rabbits add to the same list
-    // Might cause problems eventually??
-    internal static List<string> Words { get; set; }
+    //internal List<string> Words { get; set; }
     internal Position CurrentPosition { get; set; }
     internal BoggleTrie.TrieNode CurrentNode { get; set; }
 
@@ -18,24 +16,22 @@ public sealed class WordRabbit
         WordRabbit rabbit = new WordRabbit();
         rabbit.History = new VisitHistory();
         rabbit.WordSoFar = "";
-        Words = new List<string>();
+        //rabbit.Words = new List<string>();
         rabbit.CurrentPosition = startingPosition;
         rabbit.CurrentNode = trie.Root;
         
         return rabbit;
     }
     
-    public bool IsWord()
+    public string? IsWord()
     {
         if (CurrentNode.IsWord)
         {
-            if (!Words.Contains(WordSoFar))
-                Words.Add(WordSoFar);
-            //WordSoFar = "";
-            return true;
+            if (CurrentNode.IsWord)
+                return WordSoFar;
         }
 
-        return false;
+        return null;
     }
     
     public bool CheckMove(BoggleBoard board, Direction dir)
@@ -69,8 +65,10 @@ public sealed class WordRabbit
         CurrentNode = CurrentNode.Traverse(letter[0]);
     }
 
-    public bool Move(Direction dir, BoggleBoard board)
+    public bool Move(Direction dir, BoggleBoard board, out string? foundWord)
     {
+        foundWord = null;
+        
         if (!CheckMove(board, dir))
             return false;
         
@@ -91,7 +89,7 @@ public sealed class WordRabbit
         CurrentNode = nextNode;
         History.Visit(CurrentPosition, board);
 
-        IsWord();
+        foundWord = IsWord();
         return true;
     }
 

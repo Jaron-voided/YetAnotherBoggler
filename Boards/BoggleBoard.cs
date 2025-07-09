@@ -30,7 +30,7 @@ public class BoggleBoard : IBoard
         return board;
     }
     
-    private void MakeGrid(string[] letters)
+    internal void MakeGrid(string[] letters)
     {
         int index = 0;
         for (int x = 0; x < Size; x++)
