@@ -1,4 +1,4 @@
-using YetAnotherBoggler.Interfaces;
+using YetAnotherBoggler.Boards;
 
 namespace YetAnotherBoggler.Utils;
 

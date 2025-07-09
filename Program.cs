@@ -1,7 +1,8 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿
+/*
+// See https://aka.ms/new-console-template for more information
 
 using YetAnotherBoggler.Boards;
-using YetAnotherBoggler.Interfaces;
 using YetAnotherBoggler.LetterSetProviders;
 using YetAnotherBoggler.Printers;
 using YetAnotherBoggler.Shakers;
@@ -29,7 +30,7 @@ WordFinder.ExploreBoard(rabbit, boggleBoard);
 foreach (string word in WordRabbit.Words)
 {
     Console.WriteLine(word);
-}*/
+}#1#
 List<WordRabbit> rabbits = new();
 
 for (int x = 0; x < boggleBoard.Size; x++)
@@ -52,6 +53,7 @@ foreach (string word in WordRabbit.Words)
 {
     Console.WriteLine(word);
 }
+*/
 
 
 /*

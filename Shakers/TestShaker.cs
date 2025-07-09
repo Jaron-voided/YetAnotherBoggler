@@ -1,5 +1,3 @@
-using YetAnotherBoggler.Interfaces;
-
 namespace YetAnotherBoggler.Shakers;
 
 public class TestShaker : IShaker

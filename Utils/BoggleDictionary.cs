@@ -2,23 +2,23 @@ using System.Text.Json;
 
 namespace YetAnotherBoggler.Utils;
 
-public class BoggleDictionary
+public sealed class BoggleDictionary
 {
     internal List<string> Words = new List<string>();
     
-    public static BoggleDictionary Create()
+    public static BoggleDictionary Create(string? filePath = null)
     {
-        string filePath = "/home/izaya/RiderProjects/YetAnotherBoggler/YetAnotherBoggler/Utils/dictionary.json";
-        string fileContent = File.ReadAllText(filePath);
+        filePath ??= "/home/izaya/RiderProjects/YetAnotherBoggler/YetAnotherBoggler/Utils/dictionary.txt";
+        string[] lines = File.ReadAllLines(filePath);
 
-        List<string> wordList = JsonSerializer.Deserialize<List<string>>(fileContent);
+        List<string> wordList = lines
+            .Where(word => !string.IsNullOrEmpty(word) && word.Length <= 16 && word.Length > 2)
+            .Select(word => word.ToUpper())
+            .ToList();
 
         BoggleDictionary dictionary = new BoggleDictionary
         {
             Words = wordList
-                .Where(word => !string.IsNullOrEmpty(word) && word.Length <= 16 && word.Length > 2)
-                .Select(word => word.ToUpper())
-                .ToList()
         };
         
         return dictionary;

@@ -1,8 +1,8 @@
-using YetAnotherBoggler.Interfaces;
+using YetAnotherBoggler.Boards;
 
 namespace YetAnotherBoggler.Utils;
 
-public class VisitHistory
+public sealed class VisitHistory
 {
     // Private integer used as a bitmask to track visited positions.
     // Each bit represents whether a position has been visited.

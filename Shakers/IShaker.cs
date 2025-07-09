@@ -1,4 +1,4 @@
-namespace YetAnotherBoggler.Interfaces;
+namespace YetAnotherBoggler.Shakers;
 
 public interface IShaker
 {

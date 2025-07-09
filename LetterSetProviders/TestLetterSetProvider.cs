@@ -1,5 +1,3 @@
-using YetAnotherBoggler.Interfaces;
-
 namespace YetAnotherBoggler.LetterSetProviders;
 
 public class TestLetterSetProvider : ILetterSetProvider

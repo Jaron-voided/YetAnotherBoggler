@@ -1,10 +1,9 @@
 using YetAnotherBoggler.Boards;
-using YetAnotherBoggler.Interfaces;
 using YetAnotherBoggler.Utils;
 
 namespace YetAnotherBoggler.WordFinding;
 
-public class WordFinder
+public sealed class WordFinder
 {
     public static void ExploreBoard(WordRabbit wordRabbit, BoggleBoard board)
     {
@@ -25,4 +24,4 @@ public class WordFinder
                 ExploreBoard(babyRabbit, babyRabbit.CurrentPosition, board);
         }
     }
-}
+} 

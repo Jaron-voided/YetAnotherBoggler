@@ -1,10 +1,9 @@
 using YetAnotherBoggler.Boards;
-using YetAnotherBoggler.Interfaces;
 using YetAnotherBoggler.Utils;
 
 namespace YetAnotherBoggler.WordFinding;
 
-public class WordRabbit
+public sealed class WordRabbit
 {
     internal VisitHistory History { get; set; }
     internal string WordSoFar { get; set; }
@@ -12,7 +11,7 @@ public class WordRabbit
     // Might cause problems eventually??
     internal static List<string> Words { get; set; }
     internal Position CurrentPosition { get; set; }
-    internal BoggleTrie Trie { get; set; }
+    internal BoggleTrie.TrieNode CurrentNode { get; set; }
 
     public static WordRabbit Create(Position startingPosition, BoggleTrie trie)
     {
@@ -21,14 +20,14 @@ public class WordRabbit
         rabbit.WordSoFar = "";
         Words = new List<string>();
         rabbit.CurrentPosition = startingPosition;
-        rabbit.Trie = trie;
+        rabbit.CurrentNode = trie.Root;
         
         return rabbit;
     }
     
     public bool IsWord()
     {
-        if (Trie.CurrentNode.IsWord)
+        if (CurrentNode.IsWord)
         {
             if (!Words.Contains(WordSoFar))
                 Words.Add(WordSoFar);
@@ -56,7 +55,7 @@ public class WordRabbit
     {
         char c = letter[0];
         
-        if (Trie.CurrentNode.HasChild(c))
+        if (CurrentNode.HasChild(c))
             return true;
         
         return false;
@@ -65,9 +64,9 @@ public class WordRabbit
     public void Start(BoggleBoard board)
     {
         History.Visit(CurrentPosition, board);
-        string letter = board.LetterGrid[CurrentPosition.PX, CurrentPosition.PY];
+        string letter = board.GetLetter(CurrentPosition.PX, CurrentPosition.PY);
         WordSoFar += letter;
-        Trie.Traverse(letter[0]);
+        CurrentNode = CurrentNode.Traverse(letter[0]);
     }
 
     public bool Move(Direction dir, BoggleBoard board)
@@ -76,16 +75,20 @@ public class WordRabbit
             return false;
         
         Position positionToMoveTo = CurrentPosition.TryMove(dir);
-        string letter = board.LetterGrid[positionToMoveTo.PX, positionToMoveTo.PY];
+        string letter = board.GetLetter(positionToMoveTo.PX, positionToMoveTo.PY);
 
         if (!CheckLetter(letter))
+            return false;
+        
+        var nextNode = CurrentNode.Traverse(letter[0]);
+        if (nextNode == null)
             return false;
         
         WordSoFar += letter;
 
         //CurrentPosition.Move(dir);
         CurrentPosition = positionToMoveTo;
-        Trie.Traverse(letter[0]);
+        CurrentNode = nextNode;
         History.Visit(CurrentPosition, board);
 
         IsWord();
@@ -100,7 +103,7 @@ public class WordRabbit
         babyRabbit.WordSoFar = this.WordSoFar;
         //babyRabbit.Words = this.Words;
         babyRabbit.CurrentPosition = this.CurrentPosition;
-        babyRabbit.Trie = this.Trie;
+        babyRabbit.CurrentNode = this.CurrentNode;
 
         return babyRabbit;
     }

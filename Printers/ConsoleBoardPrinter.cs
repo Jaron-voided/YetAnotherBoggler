@@ -1,11 +1,10 @@
 using YetAnotherBoggler.Boards;
-using YetAnotherBoggler.Interfaces;
 
 namespace YetAnotherBoggler.Printers;
 
 public class ConsoleBoardPrinter : IBoardPrinter
 {
-    public void DisplayBoard(BoggleBoard board)
+    public void DisplayBoard(IBoard board)
     {
         int size = board.Size;
 
@@ -13,7 +12,7 @@ public class ConsoleBoardPrinter : IBoardPrinter
         {
             for (int y = 0; y < size; y++)
             {
-                Console.Write(board.LetterGrid[x, y].PadRight(3));
+                Console.Write(board.GetLetter(x, y).PadRight(3));
             }
             
             Console.WriteLine();
