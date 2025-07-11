@@ -7,10 +7,10 @@ using YetAnotherBoggler.WordFinding;
 
 // Should these all be static so I don't have to instantiate every class to use it?
 var testProvider = new TestLetterSetProvider();
-List<string[]> testLetters = testProvider.GetLetterSetFaces();
+List<char[]> testLetters = testProvider.GetLetterSetFaces();
 
 var testShaker = new TestShaker();
-string[] shakenTestLetters = testShaker.Shake(testLetters);
+char[] shakenTestLetters = testShaker.Shake(testLetters);
 
 var board = BoggleBoard.Create(shakenTestLetters);
 
@@ -35,10 +35,11 @@ for (var x = 0; x < board.Size; x++)
     }
 }
 
-foreach (var rabbit in rabbits)
+Parallel.ForEach(rabbits, rabbit =>
 {
     wordFinder.ExploreBoard(rabbit, board);
-}
+});
+
 Console.WriteLine("Rabbits found the following words");
 foreach (var word in wordFinder.CompletedWords)
 {

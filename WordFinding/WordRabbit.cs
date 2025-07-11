@@ -6,8 +6,8 @@ namespace YetAnotherBoggler.WordFinding;
 public sealed class WordRabbit
 {
     internal VisitHistory History { get; set; }
-    internal string WordSoFar { get; set; }
-    //internal List<string> Words { get; set; }
+    private char[] WordSoFar { get; set; }
+    //internal string WordSoFar { get; set; }
     internal Position CurrentPosition { get; set; }
     internal BoggleTrie.TrieNode CurrentNode { get; set; }
     internal int Depth { get; set; }
@@ -16,7 +16,8 @@ public sealed class WordRabbit
     {
         WordRabbit rabbit = new WordRabbit();
         rabbit.History = new VisitHistory();
-        rabbit.WordSoFar = "";
+        rabbit.WordSoFar = new char[16];
+        //rabbit.WordSoFar = "";
         rabbit.CurrentPosition = startingPosition;
         rabbit.CurrentNode = trie.Root;
         rabbit.Depth = 0;
@@ -29,7 +30,7 @@ public sealed class WordRabbit
         if (CurrentNode.IsWord)
         {
             if (CurrentNode.IsWord)
-                return WordSoFar;
+                return new string(WordSoFar, 0, Depth);
         }
 
         return null;
@@ -48,23 +49,33 @@ public sealed class WordRabbit
         return true;
     }
     
-    public bool CheckLetter(string letter)
+    public bool CheckLetter(char c)
     {
-        char c = letter[0];
-        
         if (CurrentNode.HasChild(c))
             return true;
         
         return false;
     }
 
+    public void AddToWordSoFar(char c)
+    {
+        WordSoFar[Depth] = c;
+        if (c == 'Q')
+        {
+            // Add another depth because I'm adding an extra letter
+            Depth++;
+            WordSoFar[Depth] = 'U';
+        }
+        // Took depth++ out of Start and Move
+        Depth++;
+    }
+
     public void Start(BoggleBoard board)
     {
         History.Visit(CurrentPosition, board);
-        string letter = board.GetLetter(CurrentPosition.PX, CurrentPosition.PY);
-        WordSoFar += letter;
-        CurrentNode = CurrentNode.Traverse(letter[0]);
-        Depth++;
+        char letter = board.GetLetter(CurrentPosition.PX, CurrentPosition.PY);
+        AddToWordSoFar(letter);
+        CurrentNode = CurrentNode.Traverse(letter);
     }
 
     public bool Move(Direction dir, BoggleBoard board, out string? foundWord)
@@ -75,38 +86,24 @@ public sealed class WordRabbit
             return false;
         
         Position positionToMoveTo = CurrentPosition.TryMove(dir);
-        string letter = board.GetLetter(positionToMoveTo.PX, positionToMoveTo.PY);
+        char letter = board.GetLetter(positionToMoveTo.PX, positionToMoveTo.PY);
 
         if (!CheckLetter(letter))
             return false;
         
-        var nextNode = CurrentNode.Traverse(letter[0]);
+        var nextNode = CurrentNode.Traverse(letter);
         if (nextNode == null)
             return false;
         
-        WordSoFar += letter;
+        AddToWordSoFar(letter);
 
         CurrentPosition.Move(dir);
-       // CurrentPosition = positionToMoveTo;
         CurrentNode = nextNode;
         History.Visit(CurrentPosition, board);
 
         foundWord = IsWord();
-        Depth++;
         
         return true;
-    }
-
-    public WordRabbit Breed()
-    {
-        WordRabbit babyRabbit = new WordRabbit();
-
-        babyRabbit.History = this.History.Copy();
-        babyRabbit.WordSoFar = this.WordSoFar;
-        babyRabbit.CurrentPosition = this.CurrentPosition;
-        babyRabbit.CurrentNode = this.CurrentNode;
-
-        return babyRabbit;
     }
 
     // I had to make TrieNode public to pass this parameter??
@@ -114,7 +111,8 @@ public sealed class WordRabbit
     {
         History.UnVisit(position, board);
         Depth--;
-        WordSoFar = WordSoFar.Substring(0, Depth);
+        Array.Clear(WordSoFar, Depth, WordSoFar.Length - Depth);
+        //WordSoFar = WordSoFar.Substring(0, Depth);
         CurrentPosition = position;
         CurrentNode = previousNode;
     }

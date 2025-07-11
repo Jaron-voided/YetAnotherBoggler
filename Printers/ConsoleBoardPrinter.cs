@@ -12,7 +12,7 @@ public class ConsoleBoardPrinter : IBoardPrinter
         {
             for (int y = 0; y < size; y++)
             {
-                Console.Write(board.GetLetter(x, y).PadRight(3));
+                Console.Write(board.GetLetter(x, y));
             }
             
             Console.WriteLine();

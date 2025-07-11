@@ -2,15 +2,15 @@ namespace YetAnotherBoggler.Boards;
 
 public class BoggleBoard : IBoard
 {
-    private readonly string[,] _letterGrid;
+    private readonly char[,] _letterGrid;
     public int Size { get; }
 
-    public string GetLetter(int x, int y)
+    public char GetLetter(int x, int y)
     {
         return _letterGrid[x, y];
     }
 
-    private void SetLetter(int x, int y, string letter)
+    private void SetLetter(int x, int y, char letter)
     {
         _letterGrid[x, y] = letter;
     }
@@ -19,10 +19,10 @@ public class BoggleBoard : IBoard
     public BoggleBoard(int size)
     {
         Size = size;
-        _letterGrid = new string[Size, Size];
+        _letterGrid = new char[Size, Size];
     }
 
-    public static BoggleBoard Create(string[] letters, int size = 4)
+    public static BoggleBoard Create(char[] letters, int size = 4)
     {
         BoggleBoard board = new BoggleBoard(size);
         board.MakeGrid(letters);
@@ -30,7 +30,7 @@ public class BoggleBoard : IBoard
         return board;
     }
     
-    internal void MakeGrid(string[] letters)
+    internal void MakeGrid(char[] letters)
     {
         int index = 0;
         for (int x = 0; x < Size; x++)

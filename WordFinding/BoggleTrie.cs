@@ -3,23 +3,12 @@ namespace YetAnotherBoggler.WordFinding;
 public class BoggleTrie
 {
     private readonly TrieNode _root = new TrieNode();           // the root will always be blank, it has 26 children A-Z
-    //internal TrieNode CurrentNode { get; set; }                 // need to keep up with Current so we can traverse
 
     internal TrieNode Root => _root;
-    /*internal void Traverse(char c, TrieNode currentNode)
-    {
-        int index = GetIndex(c);
-
-        if (currentNode.HasChild(c))
-        {
-            currentNode = currentNode.Children[index];          // Traverses to the next layer of the tree
-        }
-    }*/
-
+    
     public static BoggleTrie Create(IEnumerable<string> words)  // Factory method for creating the Trie
     {
         BoggleTrie trie = new BoggleTrie();
-        //trie.CurrentNode = trie._root;
 
         foreach (string word in words)
             trie.Insert(word);
@@ -79,17 +68,34 @@ public class BoggleTrie
             int index = GetIndex(c);
             return Children[index] != null;
         }
-        
+
         internal TrieNode? Traverse(char c)
         {
             int index = GetIndex(c);
 
             if (this.HasChild(c))
             {
-                return this.Children[index];          // Traverses to the next layer of the tree
+                return this.Children[index]; // Traverses to the next layer of the tree
             }
 
             return null;
         }
+        /*int index = GetIndex(c);
+
+        if (!this.HasChild(c))
+            return null;
+
+        var nextNode = this.Children[index];
+
+        if (c == 'Q')
+        {
+            if (!nextNode.HasChild('U'))
+                return null;
+
+            nextNode = nextNode.Children[GetIndex('U')];
+        }
+
+        return null;
+    }*/
     }
 }

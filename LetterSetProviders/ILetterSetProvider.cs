@@ -2,5 +2,5 @@ namespace YetAnotherBoggler.LetterSetProviders;
 
 public interface ILetterSetProvider
 {
-    List<string[]> GetLetterSetFaces();
+    List<char[]> GetLetterSetFaces();
 }

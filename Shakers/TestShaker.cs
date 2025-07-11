@@ -2,9 +2,9 @@ namespace YetAnotherBoggler.Shakers;
 
 public class TestShaker : IShaker
 {
-    public string[] Shake(List<string[]> letterSets)
+    public char[] Shake(List<char[]> letterSets)
     {
-        string[] shake = new string[letterSets.Count];
+        char[] shake = new char[letterSets.Count];
         for (int i = 0; i < letterSets.Count; i++)
         {
             shake[i] = letterSets[i][0];

@@ -19,7 +19,6 @@ public sealed class WordFinder
         foreach (Direction direction in directions)
         {
             var currentNode = wordRabbit.CurrentNode;
-            //WordRabbit babyRabbit = wordRabbit.Breed();
             if (wordRabbit.Move(direction, board, out string? foundWord))
             {
                 if (foundWord != null && !CompletedWords.Contains(foundWord))
