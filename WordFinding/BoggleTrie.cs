@@ -49,8 +49,8 @@ public class BoggleTrie
     {
         return c - 'A';                                         // "A" = 65 in ASCII so this returns a number 0-25 for index
     }
-    
-    internal class TrieNode
+
+    public class TrieNode
     {
         internal char Letter { get; set; }
         internal bool IsWord { get; set; }  

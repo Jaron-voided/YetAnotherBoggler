@@ -14,7 +14,18 @@ public sealed class VisitHistory
         
         // Set the bit at 'index' position to 1 in _history.
         // Example: if index = 5, (1 << 5) = 0b00100000, so _history |= 0b00100000 sets bit 5.
-        _history |= (1 << index);    }
+        _history |= (1 << index);    
+    }    
+    
+    public void UnVisit(Position pos, IBoard board)
+    {
+        int index = Position.ToIndex(pos, board.Size);
+        
+        // Sets the bitmask with one at the index we want to unvisit
+        // then flips the bitmask to all ones except the previous one is now zero
+        // Applies the AND operator to keep all 1's still 1, but change what we want to unvisit to zero
+        _history &= ~(1 << index);  
+    }
 
     public bool IsVisited(Position pos, IBoard board)
     {

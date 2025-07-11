@@ -10,8 +10,6 @@ public sealed class WordFinder
     {
         wordRabbit.Start(board);
         ExploreBoard(wordRabbit, wordRabbit.CurrentPosition, board);
-        
-        //return WordRabbit.Words;
     }
 
     public void ExploreBoard(WordRabbit wordRabbit, Position position, BoggleBoard board)
@@ -20,13 +18,16 @@ public sealed class WordFinder
 
         foreach (Direction direction in directions)
         {
-            WordRabbit babyRabbit = wordRabbit.Breed();
-            if (babyRabbit.Move(direction, board, out string? foundWord))
+            var currentNode = wordRabbit.CurrentNode;
+            //WordRabbit babyRabbit = wordRabbit.Breed();
+            if (wordRabbit.Move(direction, board, out string? foundWord))
             {
                 if (foundWord != null && !CompletedWords.Contains(foundWord))
                     CompletedWords.Add(foundWord);
                 
-                ExploreBoard(babyRabbit, babyRabbit.CurrentPosition, board);
+                ExploreBoard(wordRabbit, wordRabbit.CurrentPosition, board);
+                
+                wordRabbit.Rewind(position, board, currentNode);
             }
         }
     }

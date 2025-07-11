@@ -10,15 +10,16 @@ public sealed class WordRabbit
     //internal List<string> Words { get; set; }
     internal Position CurrentPosition { get; set; }
     internal BoggleTrie.TrieNode CurrentNode { get; set; }
+    internal int Depth { get; set; }
 
     public static WordRabbit Create(Position startingPosition, BoggleTrie trie)
     {
         WordRabbit rabbit = new WordRabbit();
         rabbit.History = new VisitHistory();
         rabbit.WordSoFar = "";
-        //rabbit.Words = new List<string>();
         rabbit.CurrentPosition = startingPosition;
         rabbit.CurrentNode = trie.Root;
+        rabbit.Depth = 0;
         
         return rabbit;
     }
@@ -63,6 +64,7 @@ public sealed class WordRabbit
         string letter = board.GetLetter(CurrentPosition.PX, CurrentPosition.PY);
         WordSoFar += letter;
         CurrentNode = CurrentNode.Traverse(letter[0]);
+        Depth++;
     }
 
     public bool Move(Direction dir, BoggleBoard board, out string? foundWord)
@@ -84,12 +86,14 @@ public sealed class WordRabbit
         
         WordSoFar += letter;
 
-        //CurrentPosition.Move(dir);
-        CurrentPosition = positionToMoveTo;
+        CurrentPosition.Move(dir);
+       // CurrentPosition = positionToMoveTo;
         CurrentNode = nextNode;
         History.Visit(CurrentPosition, board);
 
         foundWord = IsWord();
+        Depth++;
+        
         return true;
     }
 
@@ -99,10 +103,19 @@ public sealed class WordRabbit
 
         babyRabbit.History = this.History.Copy();
         babyRabbit.WordSoFar = this.WordSoFar;
-        //babyRabbit.Words = this.Words;
         babyRabbit.CurrentPosition = this.CurrentPosition;
         babyRabbit.CurrentNode = this.CurrentNode;
 
         return babyRabbit;
+    }
+
+    // I had to make TrieNode public to pass this parameter??
+    public void Rewind(Position position, IBoard board, BoggleTrie.TrieNode previousNode)
+    {
+        History.UnVisit(position, board);
+        Depth--;
+        WordSoFar = WordSoFar.Substring(0, Depth);
+        CurrentPosition = position;
+        CurrentNode = previousNode;
     }
 }
