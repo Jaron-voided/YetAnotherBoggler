@@ -31,6 +31,13 @@ public struct Direction
         new Direction(1, 0),    // Right
         new Direction(1, 0),    // Right
     };
+        
+    public static readonly Direction[] Down = new[]
+    {
+        new Direction(0, 1),    // Down
+        new Direction(0, 1),    // Down
+        new Direction(0, 1),    // Down
+    };
     
 
     public bool IsValidMove(Position pos, IBoard board)

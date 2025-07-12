@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace YetAnotherBoggler.Boards;
 
-public class BoggleBoard : IBoard
+public class BaseBoard : IBoard
 {
     private readonly char[,] _letterGrid;
     public int Size { get; }
@@ -29,17 +29,16 @@ public class BoggleBoard : IBoard
         set => _letterGrid[x, y] = value;
     }
 
-    // Should size be hardcoded for 4 since this is "BoggleBoard"??
-    public BoggleBoard(int size)
+    public BaseBoard(int size)
     {
         Size = size;
         _letterGrid = new char[Size, Size];
     }
 
     // Do I need a factory method if this is just a base class?
-    public static BoggleBoard Create(char[] letters, int size )
+    public static BaseBoard Create(char[] letters, int size )
     {
-        BoggleBoard board = new BoggleBoard(size);
+        BaseBoard board = new BaseBoard(size);
         board.MakeGrid(letters);
 
         return board;
@@ -48,9 +47,9 @@ public class BoggleBoard : IBoard
     internal void MakeGrid(char[] letters)
     {
         int index = 0;
-        for (int x = 0; x < Size; x++)
+        for (int y = 0; y < Size; y++)
         {
-            for (int y = 0; y < Size; y++)
+            for (int x = 0; x < Size; x++)
             {
                 this[x, y] = letters[index];
                 index++;

@@ -32,9 +32,9 @@ foreach (var word in wordFinder.CompletedWords)
 var wordFinder = new WordFinder();
 List<WordRabbit> rabbits = new List<WordRabbit>();
 
-for (var x = 0; x < board.Size; x++)
+for (var y = 0; y < board.Size; y++)
 {
-    for (var y = 0; y < board.Size; y++)
+    for (var x = 0; x < board.Size; x++)
     {
         Position pos = new Position(x, y);
         var rabbit = WordRabbit.Create(pos, boggleTrie);

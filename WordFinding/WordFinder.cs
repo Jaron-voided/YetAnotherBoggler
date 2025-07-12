@@ -7,16 +7,17 @@ public sealed class WordFinder
 {
     // Had to make CompletedWords public for testing
     public List<string> CompletedWords { get; } = new();
-    public void ExploreBoard(WordRabbit wordRabbit, BoggleBoard board)
+    public void ExploreBoard(WordRabbit wordRabbit, BaseBoard board)
     {
         wordRabbit.Start(board);
         ExploreBoard(wordRabbit, wordRabbit.CurrentPosition, board);
     }
 
-    public void ExploreBoard(WordRabbit wordRabbit, Position position, BoggleBoard board)
+    public void ExploreBoard(WordRabbit wordRabbit, Position position, BaseBoard board)
     {
         Direction[] directions = Direction.AllDirections;
         //Direction[] directions = Direction.Right;
+        //Direction[] directions = Direction.Down;
         foreach (Direction direction in directions)
         {
             // I don't need this anymore??

@@ -3,13 +3,13 @@ using YetAnotherBoggler.Utils;
 
 namespace YetAnotherBoggler.WordFinding;
 
-public sealed class WordRabbit
+public sealed class WordRabbit : IRabbit
 {
-    internal VisitHistory History { get; set; }
+    private VisitHistory History { get; set; }
     private char[] WordSoFar { get; set; }
-    internal Position CurrentPosition { get; set; }
-    internal BoggleTrie.TrieIterator Iterator { get; set; }
-    internal int Depth { get; set; }
+    public Position CurrentPosition { get; set; }
+    private BoggleTrie.TrieIterator Iterator { get; set; }
+    public int Depth { get; set; }
 
     public static WordRabbit Create(Position startingPosition, BoggleTrie trie)
     {
@@ -31,7 +31,7 @@ public sealed class WordRabbit
         return null;
     }
     
-    public bool CheckMove(BoggleBoard board, Direction dir)
+    public bool CheckMove(IBoard board, Direction dir)
     {
         // Checks if the move is on the board
         if (!dir.IsValidMove(CurrentPosition, board))
@@ -62,7 +62,7 @@ public sealed class WordRabbit
         Depth++;
     }
 
-    public void Start(BoggleBoard board)
+    public void Start(IBoard board)
     {
         History.Visit(CurrentPosition, board);
         char letter = board[CurrentPosition.PX, CurrentPosition.PY];
@@ -72,7 +72,7 @@ public sealed class WordRabbit
         Iterator.Traverse(letter);
     }
 
-    public bool Move(Direction dir, BoggleBoard board, out string? foundWord)
+    public bool Move(Direction dir, IBoard board, out string? foundWord)
     {
         foundWord = null;
         
@@ -91,7 +91,8 @@ public sealed class WordRabbit
         
         AddToWordSoFar(letter);
 
-        CurrentPosition.Move(dir);
+        CurrentPosition = positionToMoveTo;
+        //CurrentPosition.Move(dir);
         Iterator.Traverse(letter);
         History.Visit(CurrentPosition, board);
 

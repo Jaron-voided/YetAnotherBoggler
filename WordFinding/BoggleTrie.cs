@@ -81,12 +81,12 @@ public class BoggleTrie
     public class TrieIterator
     {
         // Do I even need this anymore?
-        internal TrieNode _currentNode;
+        //internal TrieNode _currentNode;
         internal Stack<TrieNode> VisitedNodes { get; set; } = new Stack<TrieNode>();
         internal static TrieIterator Create(TrieNode node)
         {
             TrieIterator it = new TrieIterator();
-            it._currentNode = node;
+            it.VisitedNodes.Push(node);
             return it;
         }
         
@@ -94,18 +94,18 @@ public class BoggleTrie
         {
             int index = GetIndex(c);
 
-            if (_currentNode.HasChild(c))
-            {
-                var nextNode = _currentNode.Children[index];
-                _currentNode = nextNode;
-                
-                VisitedNodes.Push(nextNode);
+            var currentNode = VisitedNodes.Peek();
 
-                if (c == 'Q' && nextNode.HasChild('U'))
+            if (currentNode.HasChild(c))
+            {
+                currentNode = currentNode.Children[index];
+
+                VisitedNodes.Push(currentNode);
+
+                if (c == 'Q' && currentNode.HasChild('U'))
                 {
-                    var uNode = nextNode.Children[GetIndex('U')];
-                    _currentNode = uNode;
-                    VisitedNodes.Push(_currentNode);
+                    currentNode = currentNode.Children[GetIndex('U')];
+                    VisitedNodes.Push(currentNode);
                 }
 
                 return true;
@@ -116,20 +116,19 @@ public class BoggleTrie
         
         public bool HasChild(char c)
         {
-            return _currentNode.HasChild(c);
+            var currentNode = VisitedNodes.Peek();
+            return currentNode.HasChild(c);
         }
 
         public bool IsWord()
         {
-            return _currentNode.IsWord;
+            var currentNode = VisitedNodes.Peek();
+            return currentNode.IsWord;
         }
 
         public void Rewind()
         {
-            if (VisitedNodes.Count > 0)
-            {
-                _currentNode = VisitedNodes.Pop();
-            }
+            VisitedNodes.Pop();
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace YetAnotherBoggler.Boards;
 
-public class OfficialBoggleBoard : BoggleBoard
+public class OfficialBoggleBoard : BaseBoard
 {
     const int size = 4;
     private OfficialBoggleBoard()
