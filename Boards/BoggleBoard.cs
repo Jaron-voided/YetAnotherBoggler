@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace YetAnotherBoggler.Boards;
 
 public class BoggleBoard : IBoard
@@ -5,14 +7,26 @@ public class BoggleBoard : IBoard
     private readonly char[,] _letterGrid;
     public int Size { get; }
 
-    public char GetLetter(int x, int y)
+    public IEnumerator<char> GetEnumerator()
     {
-        return _letterGrid[x, y];
+        for (int y = 0; y < Size; y++)
+        {
+            for (int x = 0; x < Size; x++)
+            {
+                yield return _letterGrid[x, y];
+            }
+        }
     }
 
-    private void SetLetter(int x, int y, char letter)
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        _letterGrid[x, y] = letter;
+        return GetEnumerator();
+    }
+  
+    public char this[int x, int y]
+    {
+        get => _letterGrid[x, y];
+        set => _letterGrid[x, y] = value;
     }
 
     // Should size be hardcoded for 4 since this is "BoggleBoard"??
@@ -22,7 +36,8 @@ public class BoggleBoard : IBoard
         _letterGrid = new char[Size, Size];
     }
 
-    public static BoggleBoard Create(char[] letters, int size = 4)
+    // Do I need a factory method if this is just a base class?
+    public static BoggleBoard Create(char[] letters, int size )
     {
         BoggleBoard board = new BoggleBoard(size);
         board.MakeGrid(letters);
@@ -37,22 +52,8 @@ public class BoggleBoard : IBoard
         {
             for (int y = 0; y < Size; y++)
             {
-                SetLetter(x, y, letters[index]);
+                this[x, y] = letters[index];
                 index++;
-            }
-        }
-    }
-    
-    public void CopyFrom(IBoard other)
-    {
-        if (other.Size != Size)
-            throw new ArgumentException("Board sizes do not match.");
-
-        for (int x = 0; x < Size; x++)
-        {
-            for (int y = 0; y < Size; y++)
-            {
-                SetLetter(x, y, other.GetLetter(x, y));
             }
         }
     }

@@ -1,0 +1,9 @@
+1) Does my base BoggleBoard even need a factory method anymore if its just a base?
+
+2) Should LetterSetProviders be an : IEnumerable
+
+3) What other kind of printer could I use?
+
+4) Why do I have to make BoggleDictionary.Words public for testing? Is being public here ok?
+
+5) For some reason even if I only feed my rabbit the direction Right (1, 0) it never goes right to find CAT

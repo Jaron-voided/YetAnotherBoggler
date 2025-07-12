@@ -1,6 +1,6 @@
 namespace YetAnotherBoggler.LetterSetProviders;
 
-// Returns a simple, testable baord setup
+// Should these be Enumerables?
 public class TestLetterSetProvider : ILetterSetProvider
 {
     private readonly List<char[]> _faces = new()

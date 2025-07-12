@@ -1,5 +1,6 @@
 namespace YetAnotherBoggler.LetterSetProviders;
 
+// Should these be Enumerables?
 public class OfficialLetterSetProvider
 {
     private readonly List<char[]> _faces = new()

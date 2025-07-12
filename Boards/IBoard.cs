@@ -1,8 +1,9 @@
+using System.Collections;
+
 namespace YetAnotherBoggler.Boards;
 
-public interface IBoard
+public interface IBoard : IEnumerable<char>
 {
     int Size { get;  }
-    char GetLetter(int x, int y);
-    void CopyFrom(IBoard otherBoard);
+    char this[int x, int y] { get; set; }
 }

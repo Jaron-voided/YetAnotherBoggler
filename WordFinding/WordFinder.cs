@@ -5,7 +5,8 @@ namespace YetAnotherBoggler.WordFinding;
 
 public sealed class WordFinder
 {
-    internal List<string> CompletedWords { get; } = new();
+    // Had to make CompletedWords public for testing
+    public List<string> CompletedWords { get; } = new();
     public void ExploreBoard(WordRabbit wordRabbit, BoggleBoard board)
     {
         wordRabbit.Start(board);
@@ -15,10 +16,11 @@ public sealed class WordFinder
     public void ExploreBoard(WordRabbit wordRabbit, Position position, BoggleBoard board)
     {
         Direction[] directions = Direction.AllDirections;
-
+        //Direction[] directions = Direction.Right;
         foreach (Direction direction in directions)
         {
-            var currentNode = wordRabbit.CurrentNode;
+            // I don't need this anymore??
+            //var currentNode = wordRabbit.CurrentNode;
             if (wordRabbit.Move(direction, board, out string? foundWord))
             {
                 if (foundWord != null && !CompletedWords.Contains(foundWord))
@@ -26,7 +28,7 @@ public sealed class WordFinder
                 
                 ExploreBoard(wordRabbit, wordRabbit.CurrentPosition, board);
                 
-                wordRabbit.Rewind(position, board, currentNode);
+                wordRabbit.Rewind(position, board);
             }
         }
     }

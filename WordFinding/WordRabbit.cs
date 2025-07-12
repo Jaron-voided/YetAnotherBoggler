@@ -7,9 +7,8 @@ public sealed class WordRabbit
 {
     internal VisitHistory History { get; set; }
     private char[] WordSoFar { get; set; }
-    //internal string WordSoFar { get; set; }
     internal Position CurrentPosition { get; set; }
-    internal BoggleTrie.TrieNode CurrentNode { get; set; }
+    internal BoggleTrie.TrieIterator Iterator { get; set; }
     internal int Depth { get; set; }
 
     public static WordRabbit Create(Position startingPosition, BoggleTrie trie)
@@ -17,9 +16,8 @@ public sealed class WordRabbit
         WordRabbit rabbit = new WordRabbit();
         rabbit.History = new VisitHistory();
         rabbit.WordSoFar = new char[16];
-        //rabbit.WordSoFar = "";
         rabbit.CurrentPosition = startingPosition;
-        rabbit.CurrentNode = trie.Root;
+        rabbit.Iterator = trie.GetIterator();
         rabbit.Depth = 0;
         
         return rabbit;
@@ -27,12 +25,9 @@ public sealed class WordRabbit
     
     public string? IsWord()
     {
-        if (CurrentNode.IsWord)
-        {
-            if (CurrentNode.IsWord)
+        if (Iterator.IsWord())
                 return new string(WordSoFar, 0, Depth);
-        }
-
+        
         return null;
     }
     
@@ -51,10 +46,7 @@ public sealed class WordRabbit
     
     public bool CheckLetter(char c)
     {
-        if (CurrentNode.HasChild(c))
-            return true;
-        
-        return false;
+        return Iterator.HasChild(c);
     }
 
     public void AddToWordSoFar(char c)
@@ -73,9 +65,11 @@ public sealed class WordRabbit
     public void Start(BoggleBoard board)
     {
         History.Visit(CurrentPosition, board);
-        char letter = board.GetLetter(CurrentPosition.PX, CurrentPosition.PY);
+        char letter = board[CurrentPosition.PX, CurrentPosition.PY];
         AddToWordSoFar(letter);
-        CurrentNode = CurrentNode.Traverse(letter);
+        
+        // Is this correct? Can I use the bool it returns somehow??
+        Iterator.Traverse(letter);
     }
 
     public bool Move(Direction dir, BoggleBoard board, out string? foundWord)
@@ -86,19 +80,19 @@ public sealed class WordRabbit
             return false;
         
         Position positionToMoveTo = CurrentPosition.TryMove(dir);
-        char letter = board.GetLetter(positionToMoveTo.PX, positionToMoveTo.PY);
+        char letter = board[positionToMoveTo.PX, positionToMoveTo.PY];
 
         if (!CheckLetter(letter))
             return false;
         
-        var nextNode = CurrentNode.Traverse(letter);
+        /*var nextNode = CurrentNode.Traverse(letter);
         if (nextNode == null)
-            return false;
+            return false;*/
         
         AddToWordSoFar(letter);
 
         CurrentPosition.Move(dir);
-        CurrentNode = nextNode;
+        Iterator.Traverse(letter);
         History.Visit(CurrentPosition, board);
 
         foundWord = IsWord();
@@ -107,13 +101,12 @@ public sealed class WordRabbit
     }
 
     // I had to make TrieNode public to pass this parameter??
-    public void Rewind(Position position, IBoard board, BoggleTrie.TrieNode previousNode)
+    public void Rewind(Position position, IBoard board)
     {
         History.UnVisit(position, board);
         Depth--;
         Array.Clear(WordSoFar, Depth, WordSoFar.Length - Depth);
-        //WordSoFar = WordSoFar.Substring(0, Depth);
         CurrentPosition = position;
-        CurrentNode = previousNode;
+        Iterator.Rewind();
     }
 }

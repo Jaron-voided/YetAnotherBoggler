@@ -15,14 +15,21 @@ public struct Direction
 
     public static readonly Direction[] AllDirections = new[]
     {
-        new Direction(-1, 1),   // Up Left
-        new Direction(0, 1),    // Up
-        new Direction(1, 1),    // Up Right
+        new Direction(-1, -1),  // Up Left
+        new Direction(0, -1),   // Up
+        new Direction(1, -1),   // Up Right
         new Direction(-1, 0),   // Left
         new Direction(1, 0),    // Right
-        new Direction(-1, -1),  // Down Left
-        new Direction(0, -1),   // Down
-        new Direction(1, -1)    // Down Right
+        new Direction(-1, 1),   // Down Left
+        new Direction(0, 1),    // Down
+        new Direction(1, 1)     // Down Right
+    };
+    
+    public static readonly Direction[] Right = new[]
+    {
+        new Direction(1, 0),    // Right
+        new Direction(1, 0),    // Right
+        new Direction(1, 0),    // Right
     };
     
 

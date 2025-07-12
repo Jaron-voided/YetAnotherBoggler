@@ -12,7 +12,12 @@ public class ConsoleBoardPrinter : IBoardPrinter
         {
             for (int y = 0; y < size; y++)
             {
-                Console.Write(board.GetLetter(x, y));
+                char letter = board[x, y];
+                string QU = "QU";
+                if (letter == 'Q')
+                    Console.Write(QU);
+                else
+                    Console.Write(board[x, y]);
             }
             
             Console.WriteLine();

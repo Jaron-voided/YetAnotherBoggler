@@ -4,7 +4,7 @@ public class BoggleTrie
 {
     private readonly TrieNode _root = new TrieNode();           // the root will always be blank, it has 26 children A-Z
 
-    internal TrieNode Root => _root;
+    private TrieNode Root => _root;
     
     public static BoggleTrie Create(IEnumerable<string> words)  // Factory method for creating the Trie
     {
@@ -14,6 +14,12 @@ public class BoggleTrie
             trie.Insert(word);
 
         return trie;
+    }
+
+    public TrieIterator GetIterator()
+    {
+        var it = TrieIterator.Create(_root);
+        return it;
     }
 
     public void Insert(string word)
@@ -39,7 +45,8 @@ public class BoggleTrie
         return c - 'A';                                         // "A" = 65 in ASCII so this returns a number 0-25 for index
     }
 
-    public class TrieNode
+    // I'm having to make this internal for now
+    internal class TrieNode
     {
         internal char Letter { get; set; }
         internal bool IsWord { get; set; }  
@@ -68,34 +75,61 @@ public class BoggleTrie
             int index = GetIndex(c);
             return Children[index] != null;
         }
+        
+    }
 
-        internal TrieNode? Traverse(char c)
+    public class TrieIterator
+    {
+        // Do I even need this anymore?
+        internal TrieNode _currentNode;
+        internal Stack<TrieNode> VisitedNodes { get; set; } = new Stack<TrieNode>();
+        internal static TrieIterator Create(TrieNode node)
+        {
+            TrieIterator it = new TrieIterator();
+            it._currentNode = node;
+            return it;
+        }
+        
+        internal bool Traverse(char c)
         {
             int index = GetIndex(c);
 
-            if (this.HasChild(c))
+            if (_currentNode.HasChild(c))
             {
-                return this.Children[index]; // Traverses to the next layer of the tree
+                var nextNode = _currentNode.Children[index];
+                _currentNode = nextNode;
+                
+                VisitedNodes.Push(nextNode);
+
+                if (c == 'Q' && nextNode.HasChild('U'))
+                {
+                    var uNode = nextNode.Children[GetIndex('U')];
+                    _currentNode = uNode;
+                    VisitedNodes.Push(_currentNode);
+                }
+
+                return true;
             }
 
-            return null;
+            return false;
         }
-        /*int index = GetIndex(c);
-
-        if (!this.HasChild(c))
-            return null;
-
-        var nextNode = this.Children[index];
-
-        if (c == 'Q')
+        
+        public bool HasChild(char c)
         {
-            if (!nextNode.HasChild('U'))
-                return null;
-
-            nextNode = nextNode.Children[GetIndex('U')];
+            return _currentNode.HasChild(c);
         }
 
-        return null;
-    }*/
+        public bool IsWord()
+        {
+            return _currentNode.IsWord;
+        }
+
+        public void Rewind()
+        {
+            if (VisitedNodes.Count > 0)
+            {
+                _currentNode = VisitedNodes.Pop();
+            }
+        }
     }
 }

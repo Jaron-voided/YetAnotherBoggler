@@ -4,7 +4,8 @@ namespace YetAnotherBoggler.Utils;
 
 public sealed class BoggleDictionary
 {
-    internal List<string> Words = new List<string>();
+    // Had to make Words public for testing
+    public List<string> Words = new List<string>();
     
     public static BoggleDictionary Create(string? filePath = null)
     {

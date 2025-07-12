@@ -12,7 +12,7 @@ List<char[]> testLetters = testProvider.GetLetterSetFaces();
 var testShaker = new TestShaker();
 char[] shakenTestLetters = testShaker.Shake(testLetters);
 
-var board = BoggleBoard.Create(shakenTestLetters);
+var board = OfficialBoggleBoard.Create(shakenTestLetters);
 
 var printer = new ConsoleBoardPrinter();
 printer.DisplayBoard(board);
@@ -21,7 +21,14 @@ var dictionary = BoggleDictionary.Create();
 var boggleTrie = BoggleTrie.Create(dictionary.Words);
 
 Console.WriteLine("Created dictionary and trie!");
-
+/*Position pos = new Position(0,0);
+var rabbit = WordRabbit.Create(pos, boggleTrie);
+var wordFinder = new WordFinder();
+wordFinder.ExploreBoard(rabbit, board);
+foreach (var word in wordFinder.CompletedWords)
+{
+    Console.WriteLine(word);
+}*/
 var wordFinder = new WordFinder();
 List<WordRabbit> rabbits = new List<WordRabbit>();
 
