@@ -74,14 +74,9 @@ public class RecursiveRabbit : BaseRabbit
         if (!CheckLetter(letter))
             return false;
 
-        /*var nextNode = CurrentNode.Traverse(letter);
-        if (nextNode == null)
-            return false;*/
-
         AddToWordSoFar(letter, depth);
 
         CurrentPosition = positionToMoveTo;
-        //CurrentPosition.Move(dir);
         Iterator.Traverse(letter);
         history.Visit(CurrentPosition, board);
 

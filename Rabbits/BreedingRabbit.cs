@@ -7,32 +7,34 @@ namespace YetAnotherBoggler.WordFinding;
 public class BreedingRabbit : BaseRabbit
 {
     internal VisitHistory History { get; set; }
-    internal static List<string> Words { get; set; }
+    internal static List<string> Words { get; set; } = new List<string>();
+    internal string WordSoFar { get; set; }
 
-    public static WordRabbit Create(Position startingPosition, BoggleTrie trie)
+    public static BreedingRabbit Create(Position startingPosition, BoggleTrie trie)
     {
-        WordRabbit rabbit = new WordRabbit();
+        BreedingRabbit rabbit = new BreedingRabbit();
+        
         rabbit.History = new VisitHistory();
         rabbit.WordSoFar = "";
-        //rabbit.Words = new List<string>();
         rabbit.CurrentPosition = startingPosition;
-        rabbit.CurrentNode = trie.Root;
+        rabbit.Iterator = trie.GetIterator();
         
         return rabbit;
     }
     
-    public string? IsWord()
+    public bool IsWord()
     {
-        if (CurrentNode.IsWord)
-        {
-            if (CurrentNode.IsWord)
-                return WordSoFar;
-        }
-
-        return null;
+        return Iterator.IsWord();
     }
-    
-    public bool CheckMove(BoggleBoard board, Direction dir)
+
+    public void AddWord()
+    {
+        if (IsWord())
+        {
+            Words.Add(WordSoFar);
+        }
+    }
+    public bool CheckMove(IBoard board, Direction dir)
     {
         // Checks if the move is on the board
         if (!dir.IsValidMove(CurrentPosition, board))
@@ -44,26 +46,16 @@ public class BreedingRabbit : BaseRabbit
 
         return true;
     }
-    
-    public bool CheckLetter(string letter)
-    {
-        char c = letter[0];
-        
-        if (CurrentNode.HasChild(c))
-            return true;
-        
-        return false;
-    }
 
-    public void Start(BoggleBoard board)
+    public void Start(IBoard board)
     {
         History.Visit(CurrentPosition, board);
-        string letter = board.GetLetter(CurrentPosition.PX, CurrentPosition.PY);
+        char letter = board[CurrentPosition.PX, CurrentPosition.PY];
         WordSoFar += letter;
-        CurrentNode = CurrentNode.Traverse(letter[0]);
+        Iterator.Traverse(letter);
     }
 
-    public bool Move(Direction dir, BoggleBoard board, out string? foundWord)
+    public bool Move(Direction dir, IBoard board, out string? foundWord)
     {
         foundWord = null;
         
@@ -71,35 +63,30 @@ public class BreedingRabbit : BaseRabbit
             return false;
         
         Position positionToMoveTo = CurrentPosition.TryMove(dir);
-        string letter = board.GetLetter(positionToMoveTo.PX, positionToMoveTo.PY);
+        char letter = board[positionToMoveTo.PX, positionToMoveTo.PY];
 
         if (!CheckLetter(letter))
             return false;
         
-        var nextNode = CurrentNode.Traverse(letter[0]);
-        if (nextNode == null)
-            return false;
-        
         WordSoFar += letter;
 
-        //CurrentPosition.Move(dir);
         CurrentPosition = positionToMoveTo;
-        CurrentNode = nextNode;
+        Iterator.Traverse(letter);
         History.Visit(CurrentPosition, board);
 
-        foundWord = IsWord();
+        AddWord();
+        
         return true;
     }
 
-    public WordRabbit Breed()
+    public BreedingRabbit Breed()
     {
-        WordRabbit babyRabbit = new WordRabbit();
+        BreedingRabbit babyRabbit = new BreedingRabbit();
 
         babyRabbit.History = this.History.Copy();
         babyRabbit.WordSoFar = this.WordSoFar;
-        //babyRabbit.Words = this.Words;
         babyRabbit.CurrentPosition = this.CurrentPosition;
-        babyRabbit.CurrentNode = this.CurrentNode;
+        babyRabbit.Iterator = this.Iterator;
 
         return babyRabbit;
     }

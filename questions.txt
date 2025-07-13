@@ -1,9 +1,5 @@
-1) Does my base BoggleBoard even need a factory method anymore if its just a base?
-
-2) Should LetterSetProviders be an : IEnumerable
-
-3) What other kind of printer could I use?
-
-4) Why do I have to make BoggleDictionary.Words public for testing? Is being public here ok?
-
-5) For some reason even if I only feed my rabbit the direction Right (1, 0) it never goes right to find CAT
+1) I can't make interface methods have different parameters for different rabbits, can I?
+2) Adding members to IRabbit forces me to make them public, is this ok?
+3) I can't have more functions in BaseRabbit, then Overload them for RecursiveRabbit can I? (Passing depth and history)
+4) Does Position.Move fail because its a struct? Should I make it a class or just use TryMove (In Position.cs)
+5)

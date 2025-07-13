@@ -7,9 +7,6 @@ namespace YetAnotherBoggler.Rabbits;
 public class WordRabbit : BaseRabbit
 {
     private VisitHistory History { get; set; }
-    /*private char[] WordSoFar { get; set; }
-    public Position CurrentPosition { get; set; }
-    private BoggleTrie.TrieIterator Iterator { get; set; }*/
     public int Depth { get; set; }
 
     public static WordRabbit Create(Position startingPosition, BoggleTrie trie)
@@ -43,11 +40,6 @@ public class WordRabbit : BaseRabbit
             return false;
 
         return true;
-    }
-    
-    public bool CheckLetter(char c)
-    {
-        return Iterator.HasChild(c);
     }
 
     public void AddToWordSoFar(char c)
@@ -86,14 +78,13 @@ public class WordRabbit : BaseRabbit
         if (!CheckLetter(letter))
             return false;
         
-        /*var nextNode = CurrentNode.Traverse(letter);
-        if (nextNode == null)
-            return false;*/
-        
         AddToWordSoFar(letter);
 
         CurrentPosition = positionToMoveTo;
+        
+        // Use explicit assignment because Position is a struct (Move() would modify a copy)
         //CurrentPosition.Move(dir);
+        
         Iterator.Traverse(letter);
         History.Visit(CurrentPosition, board);
 

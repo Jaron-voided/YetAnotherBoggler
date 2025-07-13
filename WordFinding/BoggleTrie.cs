@@ -80,8 +80,6 @@ public class BoggleTrie
 
     public class TrieIterator
     {
-        // Do I even need this anymore?
-        //internal TrieNode _currentNode;
         internal Stack<TrieNode> VisitedNodes { get; set; } = new Stack<TrieNode>();
         internal static TrieIterator Create(TrieNode node)
         {
@@ -124,6 +122,13 @@ public class BoggleTrie
         {
             var currentNode = VisitedNodes.Peek();
             return currentNode.IsWord;
+        }
+        
+        public TrieIterator Clone()
+        {
+            TrieIterator clone = new TrieIterator();
+            clone.VisitedNodes = new Stack<TrieNode>(VisitedNodes.Reverse()); // copy stack with same order
+            return clone;
         }
 
         public void Rewind()
