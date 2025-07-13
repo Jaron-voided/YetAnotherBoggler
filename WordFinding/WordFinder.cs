@@ -1,4 +1,5 @@
 using YetAnotherBoggler.Boards;
+using YetAnotherBoggler.Rabbits;
 using YetAnotherBoggler.Utils;
 
 namespace YetAnotherBoggler.WordFinding;
@@ -7,13 +8,13 @@ public sealed class WordFinder
 {
     // Had to make CompletedWords public for testing
     public List<string> CompletedWords { get; } = new();
-    public void ExploreBoard(WordRabbit wordRabbit, BaseBoard board)
+    public void ExploreBoard(BaseRabbit wordRabbit, BaseBoard board)
     {
         wordRabbit.Start(board);
         ExploreBoard(wordRabbit, wordRabbit.CurrentPosition, board);
     }
 
-    public void ExploreBoard(WordRabbit wordRabbit, Position position, BaseBoard board)
+    public void ExploreBoard(BaseRabbit wordRabbit, Position position, BaseBoard board)
     {
         Direction[] directions = Direction.AllDirections;
         //Direction[] directions = Direction.Right;

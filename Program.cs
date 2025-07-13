@@ -1,6 +1,7 @@
 ﻿using YetAnotherBoggler.Boards;
 using YetAnotherBoggler.LetterSetProviders;
 using YetAnotherBoggler.Printers;
+using YetAnotherBoggler.Rabbits;
 using YetAnotherBoggler.Shakers;
 using YetAnotherBoggler.Utils;
 using YetAnotherBoggler.WordFinding;
@@ -30,14 +31,14 @@ foreach (var word in wordFinder.CompletedWords)
     Console.WriteLine(word);
 }*/
 var wordFinder = new WordFinder();
-List<WordRabbit> rabbits = new List<WordRabbit>();
+List<BaseRabbit> rabbits = new List<BaseRabbit>();
 
 for (var y = 0; y < board.Size; y++)
 {
     for (var x = 0; x < board.Size; x++)
     {
         Position pos = new Position(x, y);
-        var rabbit = WordRabbit.Create(pos, boggleTrie);
+        var rabbit = BaseRabbit.Create(pos, boggleTrie);
         rabbits.Add(rabbit);
     }
 }

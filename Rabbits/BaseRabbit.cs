@@ -1,37 +1,43 @@
 using YetAnotherBoggler.Boards;
 using YetAnotherBoggler.Utils;
+using YetAnotherBoggler.WordFinding;
 
-namespace YetAnotherBoggler.WordFinding;
+namespace YetAnotherBoggler.Rabbits;
 
-public sealed class WordRabbit : IRabbit
+public class BaseRabbit : IRabbit
 {
-    private VisitHistory History { get; set; }
-    private char[] WordSoFar { get; set; }
+    //private VisitHistory History { get; set; }
+    protected char[] WordSoFar { get; set; }
     public Position CurrentPosition { get; set; }
-    private BoggleTrie.TrieIterator Iterator { get; set; }
-    public int Depth { get; set; }
 
-    public static WordRabbit Create(Position startingPosition, BoggleTrie trie)
+    protected BoggleTrie.TrieIterator Iterator { get; set; }
+    //public int Depth { get; set; }
+
+    /*
+    public static BaseRabbit Create(Position startingPosition, BoggleTrie trie)
     {
-        WordRabbit rabbit = new WordRabbit();
-        rabbit.History = new VisitHistory();
+        BaseRabbit rabbit = new BaseRabbit();
+        //rabbit.History = new VisitHistory();
         rabbit.WordSoFar = new char[16];
         rabbit.CurrentPosition = startingPosition;
         rabbit.Iterator = trie.GetIterator();
-        rabbit.Depth = 0;
+        //rabbit.Depth = 0;
         
         return rabbit;
     }
+    */
     
-    public string? IsWord()
+    /*
+    public string? IsWord(int depth)
     {
         if (Iterator.IsWord())
-                return new string(WordSoFar, 0, Depth);
+                return new string(WordSoFar, 0, depth);
         
         return null;
     }
+    */
     
-    public bool CheckMove(IBoard board, Direction dir)
+    /*public bool CheckMove(IBoard board, Direction dir)
     {
         // Checks if the move is on the board
         if (!dir.IsValidMove(CurrentPosition, board))
@@ -42,14 +48,14 @@ public sealed class WordRabbit : IRabbit
             return false;
 
         return true;
-    }
+    }*/
     
     public bool CheckLetter(char c)
     {
         return Iterator.HasChild(c);
     }
 
-    public void AddToWordSoFar(char c)
+    /*public void AddToWordSoFar(char c)
     {
         WordSoFar[Depth] = c;
         if (c == 'Q')
@@ -60,9 +66,9 @@ public sealed class WordRabbit : IRabbit
         }
         // Took depth++ out of Start and Move
         Depth++;
-    }
+    }*/
 
-    public void Start(IBoard board)
+    /*public void Start(IBoard board)
     {
         History.Visit(CurrentPosition, board);
         char letter = board[CurrentPosition.PX, CurrentPosition.PY];
@@ -70,9 +76,9 @@ public sealed class WordRabbit : IRabbit
         
         // Is this correct? Can I use the bool it returns somehow??
         Iterator.Traverse(letter);
-    }
+    }*/
 
-    public bool Move(Direction dir, IBoard board, out string? foundWord)
+    /*public bool Move(Direction dir, IBoard board, out string? foundWord)
     {
         foundWord = null;
         
@@ -87,7 +93,7 @@ public sealed class WordRabbit : IRabbit
         
         /*var nextNode = CurrentNode.Traverse(letter);
         if (nextNode == null)
-            return false;*/
+            return false;#1#
         
         AddToWordSoFar(letter);
 
@@ -99,15 +105,15 @@ public sealed class WordRabbit : IRabbit
         foundWord = IsWord();
         
         return true;
-    }
+    }*/
 
     // I had to make TrieNode public to pass this parameter??
-    public void Rewind(Position position, IBoard board)
+    /*public void Rewind(Position position, IBoard board)
     {
         History.UnVisit(position, board);
         Depth--;
         Array.Clear(WordSoFar, Depth, WordSoFar.Length - Depth);
         CurrentPosition = position;
         Iterator.Rewind();
-    }
+    }*/
 }
